@@ -47,47 +47,47 @@ all: $(EXE_NAME)
 # gathers the set of compiled objects that need to be linked into an executable using 'find' command
 #---------------
 $(EXE_NAME): authutil eventhub iotdevicegateway cryptoutil lsm9ds0 messagingclient i2cdevice main lsm9ds0processor aws-iot-sdk
-    $(CC) -L$(LIB_PATH) $(shell find $(OBJ_PATH) -name '*.o') -o $(EXE_PATH)/$(EXE_NAME) $(LIBS)
+	$(CC) -L$(LIB_PATH) $(shell find $(OBJ_PATH) -name '*.o') -o $(EXE_PATH)/$(EXE_NAME) $(LIBS)
 
 #---------------
 # targets for core modules that make up the exe
 #---------------
 authutil:
-    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/cloud/azure/authutil.c -o $(OBJ_PATH)/authutil.o
+	$(CC) -I$(INC_PATH) -c $(SRC_PATH)/cloud/azure/authutil.c -o $(OBJ_PATH)/authutil.o
 
 eventhub:
-    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/cloud/azure/eventhub.c -o $(OBJ_PATH)/eventhub.o
+	$(CC) -I$(INC_PATH) -c $(SRC_PATH)/cloud/azure/eventhub.c -o $(OBJ_PATH)/eventhub.o
 	
 iotdevicegateway:
-    $(CC) -I$(INC_PATH) -I$(DEP_INC_PATH1) -I$(DEP_INC_PATH2) -I$(DEP_INC_PATH3) -I$(DEP_INC_PATH4) -c $(SRC_PATH)/cloud/aws/iotdevicegateway.c -o $(OBJ_PATH)/iotdevicegateway.o
+	$(CC) -I$(INC_PATH) -I$(DEP_INC_PATH1) -I$(DEP_INC_PATH2) -I$(DEP_INC_PATH3) -I$(DEP_INC_PATH4) -c $(SRC_PATH)/cloud/aws/iotdevicegateway.c -o $(OBJ_PATH)/iotdevicegateway.o
 
 cryptoutil:
-    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/crypto/openssl/cryptoutil.c -o $(OBJ_PATH)/cryptoutil.o
+	$(CC) -I$(INC_PATH) -c $(SRC_PATH)/crypto/openssl/cryptoutil.c -o $(OBJ_PATH)/cryptoutil.o
 
 lsm9ds0:
-    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/ic/imu/lsm9ds0.c -o $(OBJ_PATH)/lsm9ds0.o
+	$(CC) -I$(INC_PATH) -c $(SRC_PATH)/ic/imu/lsm9ds0.c -o $(OBJ_PATH)/lsm9ds0.o
 
 messagingclient:
-    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/io/amqp/apache-qpid-proton/messagingclient.c -o $(OBJ_PATH)/messagingclient.o
+	$(CC) -I$(INC_PATH) -c $(SRC_PATH)/io/amqp/apache-qpid-proton/messagingclient.c -o $(OBJ_PATH)/messagingclient.o
 
 i2cdevice:
-    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/io/i2c/intel-mraa/i2cdevice.c -o $(OBJ_PATH)/i2cdevice.o
+	$(CC) -I$(INC_PATH) -c $(SRC_PATH)/io/i2c/intel-mraa/i2cdevice.c -o $(OBJ_PATH)/i2cdevice.o
 
 main:
-    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/main/main.c -o $(OBJ_PATH)/main.o
+	$(CC) -I$(INC_PATH) -c $(SRC_PATH)/main/main.c -o $(OBJ_PATH)/main.o
 
 lsm9ds0processor:
-    $(CC) -I$(INC_PATH) -I$(DEP_INC_PATH1) -I$(DEP_INC_PATH2) -I$(DEP_INC_PATH3) -I$(DEP_INC_PATH4) -c $(SRC_PATH)/processor/lsm9ds0processor.c -o $(OBJ_PATH)/lsm9ds0processor.o
+	$(CC) -I$(INC_PATH) -I$(DEP_INC_PATH1) -I$(DEP_INC_PATH2) -I$(DEP_INC_PATH3) -I$(DEP_INC_PATH4) -c $(SRC_PATH)/processor/lsm9ds0processor.c -o $(OBJ_PATH)/lsm9ds0processor.o
 
 #---------------
 # targets for third-party modules the exe is dependent upon
 #---------------
 aws-iot-sdk:
-    cd $(OBJ_PATH)/dependency; \
-    $(MAKE) -f ../../../make/dependency_makefile all 
+	cd $(OBJ_PATH)/dependency; \
+	$(MAKE) -f ../../../make/dependency_makefile all 
 
 #---------------
 # clean slate
 #---------------
 clean:
-    rm $(OBJ_PATH)/* $(EXE_PATH)/*
+	rm $(OBJ_PATH)/* $(EXE_PATH)/*
