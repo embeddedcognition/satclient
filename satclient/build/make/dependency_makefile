@@ -50,10 +50,10 @@ all: aws-iot-sdk
 # target for building the sdk
 #---------------
 aws-iot-sdk:
-    $(CC) $(INC_DIRS) -c $(SRC_FILES)
+	$(CC) $(INC_DIRS) -c $(SRC_FILES)
 
 #---------------
 # clean slate
 #---------------
 clean:
-    rm $(OBJ_PATH)/dependency/*
+	rm $(OBJ_PATH)/dependency/*
