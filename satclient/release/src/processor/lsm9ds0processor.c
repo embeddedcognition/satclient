@@ -82,7 +82,7 @@ bool perform_lsm9ds0_sat(int desired_processing_limit)
     }
 
     //shutdown iot device gateway
-    shutdown_iot_device_gateway(device_gateway);
+    shutdown_iot_device_gateway(&device_gateway);
 
     return operation_status;
 }
