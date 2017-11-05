@@ -1,0 +1,93 @@
+# Author: James Beasley
+# Repo: https://github.com/embeddedcognition/satclient
+
+#-------------
+# global vars
+#-------------
+
+#compile/link (show all warnings) 
+CC = gcc -Wall
+
+#build management
+MAKE = make
+
+#path to includes
+INC_PATH = ../release/inc
+#any SAT client module that includes an AWS header (either directly or indirectly) will need to include these paths in its build statement   
+DEP_INC_PATH1 = ../release/src/io/mqtt/aws-iot-sdk/mbedtls/include
+DEP_INC_PATH2 = ../release/src/io/mqtt/aws-iot-sdk/mbedtls/platform/linux/common
+DEP_INC_PATH3 = ../release/src/io/mqtt/aws-iot-sdk/mbedtls/platform/linux/mbedtls
+DEP_INC_PATH4 = ../release/src/io/mqtt/aws-iot-sdk/mbedtls/platform/linux/pthread
+
+#path to source code
+SRC_PATH = ../release/src
+
+#path to libraries
+LIB_PATH = /usr/lib
+
+#path to compiled objects
+OBJ_PATH = obj/release
+
+#path to linked executable
+EXE_PATH = bin/release
+
+#name of target/executable
+EXE_NAME = satclient
+
+#set of libraries this build depends on
+LIBS = -lmraa -lqpid-proton -lcurl -lcrypto -ldl -lmbedtls -lmbedcrypto -lmbedx509 -lpthread
+
+#---------------
+# default target 
+#---------------
+all: $(EXE_NAME)
+
+#---------------
+# target for building the exe
+# gathers the set of compiled objects that need to be linked into an executable using 'find' command
+#---------------
+$(EXE_NAME): authutil eventhub iotdevicegateway cryptoutil lsm9ds0 messagingclient i2cdevice main lsm9ds0processor aws-iot-sdk
+    $(CC) -L$(LIB_PATH) $(shell find $(OBJ_PATH) -name '*.o') -o $(EXE_PATH)/$(EXE_NAME) $(LIBS)
+
+#---------------
+# targets for core modules that make up the exe
+#---------------
+authutil:
+    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/cloud/azure/authutil.c -o $(OBJ_PATH)/authutil.o
+
+eventhub:
+    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/cloud/azure/eventhub.c -o $(OBJ_PATH)/eventhub.o
+	
+iotdevicegateway:
+    $(CC) -I$(INC_PATH) -I$(DEP_INC_PATH1) -I$(DEP_INC_PATH2) -I$(DEP_INC_PATH3) -I$(DEP_INC_PATH4) -c $(SRC_PATH)/cloud/aws/iotdevicegateway.c -o $(OBJ_PATH)/iotdevicegateway.o
+
+cryptoutil:
+    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/crypto/openssl/cryptoutil.c -o $(OBJ_PATH)/cryptoutil.o
+
+lsm9ds0:
+    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/ic/imu/lsm9ds0.c -o $(OBJ_PATH)/lsm9ds0.o
+
+messagingclient:
+    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/io/amqp/apache-qpid-proton/messagingclient.c -o $(OBJ_PATH)/messagingclient.o
+
+i2cdevice:
+    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/io/i2c/intel-mraa/i2cdevice.c -o $(OBJ_PATH)/i2cdevice.o
+
+main:
+    $(CC) -I$(INC_PATH) -c $(SRC_PATH)/main/main.c -o $(OBJ_PATH)/main.o
+
+lsm9ds0processor:
+    $(CC) -I$(INC_PATH) -I$(DEP_INC_PATH1) -I$(DEP_INC_PATH2) -I$(DEP_INC_PATH3) -I$(DEP_INC_PATH4) -c $(SRC_PATH)/processor/lsm9ds0processor.c -o $(OBJ_PATH)/lsm9ds0processor.o
+
+#---------------
+# targets for third-party modules the exe is dependent upon
+#---------------
+aws-iot-sdk:
+    cd $(OBJ_PATH)/dependency; \
+    $(MAKE) -f ../../../make/dependency_makefile all 
+
+#---------------
+# clean slate
+#---------------
+clean:
+    rm $(OBJ_PATH)/* $(EXE_PATH)/*

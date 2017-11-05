@@ -1,0 +1,59 @@
+# Author: James Beasley
+# Repo: https://github.com/embeddedcognition/satclient
+
+#-------------
+# global vars
+#-------------
+
+#compile/link (show all warnings) 
+CC = gcc -Wall
+
+#build management
+MAKE = make
+
+## global paths ##
+AWS_IOT_SDK_BASE_DIR = ../../../../release/src/io/mqtt/aws-iot-sdk/mbedtls
+JSMN_DIR = $(AWS_IOT_SDK_BASE_DIR)/external_libs/jsmn
+PLATFORM_DIR = $(AWS_IOT_SDK_BASE_DIR)/platform/linux
+PLATFORM_COMMON_DIR = $(PLATFORM_DIR)/common
+PLATFORM_MBEDTLS_DIR = $(PLATFORM_DIR)/mbedtls
+PLATFORM_PTHREAD_DIR = $(PLATFORM_DIR)/pthread
+AWS_IOT_SDK_SRC_DIR = $(AWS_IOT_SDK_BASE_DIR)/src
+########################
+
+## paths to includes ##
+#aggregated include
+INC_DIRS += -I $(AWS_IOT_SDK_BASE_DIR)/include
+INC_DIRS += -I $(JSMN_DIR)
+INC_DIRS += -I $(PLATFORM_COMMON_DIR)
+INC_DIRS += -I $(PLATFORM_MBEDTLS_DIR)
+INC_DIRS += -I $(PLATFORM_PTHREAD_DIR)
+# path to aws_iot_config.h
+INC_DIRS += -I ../../../../release/inc
+########################
+
+## paths to source ##
+#aggregated source
+SRC_FILES += $(shell find $(JSMN_DIR) -name '*.c')
+SRC_FILES += $(shell find $(PLATFORM_COMMON_DIR) -name '*.c')
+SRC_FILES += $(shell find $(PLATFORM_MBEDTLS_DIR) -name '*.c')
+SRC_FILES += $(shell find $(PLATFORM_PTHREAD_DIR) -name '*.c')
+SRC_FILES += $(shell find $(AWS_IOT_SDK_SRC_DIR) -name '*.c')
+########################
+
+#---------------
+# default target 
+#---------------
+all: aws-iot-sdk
+
+#---------------
+# target for building the sdk
+#---------------
+aws-iot-sdk:
+    $(CC) $(INC_DIRS) -c $(SRC_FILES)
+
+#---------------
+# clean slate
+#---------------
+clean:
+    rm $(OBJ_PATH)/dependency/*

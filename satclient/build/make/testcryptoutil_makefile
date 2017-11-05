@@ -1,0 +1,60 @@
+# Author: James Beasley
+# Repo: https://github.com/embeddedcognition/satclient
+
+#-------------
+# global vars
+#-------------
+
+#compile/link (show all warnings) 
+CC = gcc -Wall
+
+#path to test includes
+TST_INC_PATH = ../test/inc
+
+#path to test source code
+TST_SRC_PATH = ../test/src
+
+#path to release includes
+REL_INC_PATH = ../release/inc
+
+#path to release source code
+REL_SRC_PATH = ../release/src
+
+#path to libraries
+LIB_PATH = /usr/lib
+
+#path to test compiled objects
+OBJ_PATH = obj/test
+
+#path to linked executable
+EXE_PATH = bin/test
+
+#name of target/executable
+EXE_NAME = testcryptoutil
+
+#set of libraries this build depends on
+LIBS = -lcrypto
+
+#set of compiled objects that need to be linked into an executable
+OBJS = $(OBJ_PATH)/testcryptoutil.o $(OBJ_PATH)/unity.o $(OBJ_PATH)/cryptoutil.o
+
+#---------------
+# build targets
+#---------------
+
+all: $(EXE_NAME)
+
+$(EXE_NAME): testcryptoutil.o unity.o cryptoutil.o
+	$(CC) -L$(LIB_PATH) $(OBJS) -o $(EXE_PATH)/$(EXE_NAME) $(LIBS)
+
+testcryptoutil.o:
+	$(CC) -I$(TST_INC_PATH) -I$(TST_INC_PATH)/unity -I$(REL_INC_PATH) -c $(TST_SRC_PATH)/crypto/openssl/testcryptoutil.c -o $(OBJ_PATH)/testcryptoutil.o
+
+unity.o:
+	$(CC) -I$(TST_INC_PATH)/unity -c $(TST_SRC_PATH)/unity/unity.c -o $(OBJ_PATH)/unity.o
+
+cryptoutil.o:
+	$(CC) -I$(REL_INC_PATH) -c $(REL_SRC_PATH)/crypto/openssl/cryptoutil.c -o $(OBJ_PATH)/cryptoutil.o
+
+clean:
+	rm $(OBJ_PATH)/testcryptoutil.o $(OBJ_PATH)/unity.o $(OBJ_PATH)/cryptoutil.o $(EXE_PATH)/$(EXE_NAME)
