@@ -12,7 +12,7 @@ CC = gcc -Wall
 MAKE = make
 
 ## global paths ##
-AWS_IOT_SDK_BASE_DIR = ../../../../release/src/io/mqtt/aws-iot-sdk/mbedtls
+AWS_IOT_SDK_BASE_DIR = ../../../../release/src/io/mqtt/aws-iot-sdk-2-1-1
 JSMN_DIR = $(AWS_IOT_SDK_BASE_DIR)/external_libs/jsmn
 PLATFORM_DIR = $(AWS_IOT_SDK_BASE_DIR)/platform/linux
 PLATFORM_COMMON_DIR = $(PLATFORM_DIR)/common

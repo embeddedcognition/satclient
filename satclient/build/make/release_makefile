@@ -14,10 +14,10 @@ MAKE = make
 #path to includes
 INC_PATH = ../release/inc
 #any SAT client module that includes an AWS header (either directly or indirectly) will need to include these paths in its build statement   
-DEP_INC_PATH1 = ../release/src/io/mqtt/aws-iot-sdk/mbedtls/include
-DEP_INC_PATH2 = ../release/src/io/mqtt/aws-iot-sdk/mbedtls/platform/linux/common
-DEP_INC_PATH3 = ../release/src/io/mqtt/aws-iot-sdk/mbedtls/platform/linux/mbedtls
-DEP_INC_PATH4 = ../release/src/io/mqtt/aws-iot-sdk/mbedtls/platform/linux/pthread
+DEP_INC_PATH1 = ../release/src/io/mqtt/aws-iot-sdk-2-1-1/include
+DEP_INC_PATH2 = ../release/src/io/mqtt/aws-iot-sdk-2-1-1/platform/linux/common
+DEP_INC_PATH3 = ../release/src/io/mqtt/aws-iot-sdk-2-1-1/platform/linux/mbedtls
+DEP_INC_PATH4 = ../release/src/io/mqtt/aws-iot-sdk-2-1-1/platform/linux/pthread
 
 #path to source code
 SRC_PATH = ../release/src
