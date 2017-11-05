@@ -31,19 +31,19 @@ bool perform_lsm9ds0_sat(int desired_processing_limit)
     if (init_lsm9ds0(&lsm) && init_iot_device_gateway(&device_gateway))
     {
         //display sensor info
-        display_sensor_info(lsm);
+        display_sensor_info(&lsm);
 
         //loop forever
         while (true)
         {
             //block until new signal readings are available
-            poll_for_signal_readings(lsm);
+            poll_for_signal_readings(&lsm);
 
             //** perform signal acquisition **
             //get the latest accelerometer, magnetometer, and gyroscope readings (will also check for any overruns)
-            if (get_latest_signal_reading(lsm, ACCEL, &(signal_reading_aggregate.accel)) &&
-                get_latest_signal_reading(lsm, MAGNETO, &(signal_reading_aggregate.magneto)) &&
-                get_latest_signal_reading(lsm, GYRO, &(signal_reading_aggregate.gyro)))
+            if (get_latest_signal_reading(&lsm, ACCEL, &(signal_reading_aggregate.accel)) &&
+                get_latest_signal_reading(&lsm, MAGNETO, &(signal_reading_aggregate.magneto)) &&
+                get_latest_signal_reading(&lsm, GYRO, &(signal_reading_aggregate.gyro)))
             {
                 //** perform signal transformation **
                 //convert signal reading aggregate to telemetry reading
