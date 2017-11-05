@@ -79,9 +79,10 @@ bool init_iot_device_gateway(IOT_DEVICE_GATEWAY* device_gateway)
 
 //function definition
 //deinit the iot device gateway
-void shutdown_iot_device_gateway(IOT_DEVICE_GATEWAY* device_gateway)
+bool shutdown_iot_device_gateway(IOT_DEVICE_GATEWAY* device_gateway)
 {
     //local vars
+    bool operation_status = false;      //denotes success or failure of the operation
     IoT_Error_t result_code = FAILURE;  //result code from iot operation
 
     //check input
@@ -90,12 +91,19 @@ void shutdown_iot_device_gateway(IOT_DEVICE_GATEWAY* device_gateway)
         //attempt to disconnect from the aws device gateway
         result_code = aws_iot_mqtt_disconnect(&(device_gateway->client_context));
 
-        //if disconnect failed
-        if (result_code != SUCCESS)
+        //if the disconnect succeeded
+        if (result_code == SUCCESS)
+        {
+            //success
+            operation_status = true;
+        }
+        else
         {
             fprintf(stderr, "ERROR: AWS IOT DISCONNECT FAILED! - %d\n", result_code);
         }
     }
+
+    return operation_status;
 }
 
 //function definition
