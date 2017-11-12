@@ -10,6 +10,9 @@
 #include "iotdevicegateway.h"   //using to publish events to aws iot device gateway
 #include "lsm9ds0processor.h"
 
+//global vars
+static const int DESIRED_WINDOW_SIZE = 300; //~3 seconds - ~100 samples per second - accelerometer & magnetometer generate 100 samples per second, gyroscope generates 95 samples per second
+
 //function declarations
 static void display_sensor_info(LSM9DS0*);
 static void poll_for_signal_readings(LSM9DS0*);
@@ -22,6 +25,7 @@ bool perform_lsm9ds0_sat(int desired_processing_limit)
     //local vars
     bool operation_status = false;          //denotes success or failure of the operation
     int sequence_id = 0;                    //zero indexed - order of signal readings (each telemetry reading is tagged with a sequence number)
+    int window_id = 0;                      //zero indexed - each telemetry reading is clustered in an interval (window) of 'x' readings equal to the desired_window_size
     LSM9DS0 lsm;
     IOT_DEVICE_GATEWAY device_gateway;
     LSM9DS0_SIGNAL_READING_AGGREGATE signal_reading_aggregate;
@@ -53,6 +57,16 @@ bool perform_lsm9ds0_sat(int desired_processing_limit)
                     //** perform data transmission **
                     //publish telemetry reading to aws iot device gateway (fire and forget)
                     publish_telemetry_to_device_gateway(&device_gateway, &telemetry);
+
+                    //advance our window id if we've sent a set of messages equal to our desired window size
+                    if ((sequence_id % DESIRED_WINDOW_SIZE) == 0)
+                    {
+                        window_id++;
+                        //print current accelerometer payload to stdout for testing purposes
+                        fprintf(stdout, "ACCEL X READING: %d\n", signal_reading_aggregate.accel.x);
+                        fprintf(stdout, "ACCEL Y READING: %d\n", signal_reading_aggregate.accel.y);
+                        fprintf(stdout, "ACCEL Z READING: %d\n", signal_reading_aggregate.accel.z);
+                    }
 
                     //break out if we've sent our limit of messages for this run of the SAT client
                     if (sequence_id == desired_processing_limit)
