@@ -63,9 +63,9 @@ bool perform_lsm9ds0_sat(int desired_processing_limit)
                     {
                         window_id++;
                         //print current accelerometer payload to stdout for testing purposes
-                        fprintf(stdout, "ACCEL X READING: %d\n", signal_reading_aggregate.accel.x);
-                        fprintf(stdout, "ACCEL Y READING: %d\n", signal_reading_aggregate.accel.y);
-                        fprintf(stdout, "ACCEL Z READING: %d\n", signal_reading_aggregate.accel.z);
+                        fprintf(stdout, "ACCEL X READING: %f\n", signal_reading_aggregate.accel.x);
+                        fprintf(stdout, "ACCEL Y READING: %f\n", signal_reading_aggregate.accel.y);
+                        fprintf(stdout, "ACCEL Z READING: %f\n", signal_reading_aggregate.accel.z);
                     }
 
                     //break out if we've sent our limit of messages for this run of the SAT client
