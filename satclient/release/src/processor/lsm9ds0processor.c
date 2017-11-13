@@ -66,9 +66,9 @@ bool perform_lsm9ds0_sat(int desired_processing_limit)
                         //the readings are in Gauss (g) (earth gravitation units) and we must convert them to
                         //meters per second per second or meters per square second, by multiplying by the conversion factor 9.81
                         //1 g = 9.81 m/s^2
-                        fprintf(stdout, "ACCEL X READING: %f\n", signal_reading_aggregate.accel.x * 9.81);
-                        fprintf(stdout, "ACCEL Y READING: %f\n", signal_reading_aggregate.accel.y * 9.81);
-                        fprintf(stdout, "ACCEL Z READING: %f\n", signal_reading_aggregate.accel.z * 9.81);
+                        fprintf(stdout, "ACCEL X READING: %lf\n", signal_reading_aggregate.accel.x * 9.81);
+                        fprintf(stdout, "ACCEL Y READING: %lf\n", signal_reading_aggregate.accel.y * 9.81);
+                        fprintf(stdout, "ACCEL Z READING: %lf\n", signal_reading_aggregate.accel.z * 9.81);
                     }
 
                     //break out if we've sent our limit of messages for this run of the SAT client
